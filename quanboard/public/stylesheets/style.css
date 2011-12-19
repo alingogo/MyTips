@@ -1,0 +1,37 @@
+body {
+  padding: 0px 10px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+#title {
+  width: 300px;
+  float: left;
+}
+
+#content {
+  width: 960px;
+}
+#notes {
+  width: 730px;
+  height: 500px;
+  clear: left;
+  float: left;
+}
+
+#new {
+  width: 200px;
+  height: 500px;
+  padding: 5px;
+  margin: 0px 5px;
+  border-left: solid red 2px;
+  float: left;
+  z-index: 99999;
+}
+
+#original_notes {
+  display: none;
+}
