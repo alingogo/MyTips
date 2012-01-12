@@ -1,8 +1,13 @@
 var newNote = {};
 var socket = io.connect();
 var new_note_id = "";
+var lock = false;
+
 jQuery(function(){
   jQuery.fn.stickyNotes.tempNote = function(note){
+
+    if ( lock ) { return; }
+    lock = true;
     var pos_x = 100;
     var pos_y = 760;
     var note_id = (new Date).getTime().toString();
@@ -17,6 +22,7 @@ jQuery(function(){
                                               .addClass('jSticky-delete')
                                               .click(function(){jQuery.fn.stickyNotes.deleteNote(this);});
     var _div_wrap   =       $(document.createElement('div'))
+                                        .addClass("tempnote")
                                         .css({'position':'absolute','top':pos_x,'left':pos_y, 'float' : 'left'})
                                         .attr("id", "note-" + note_id)
                                         .append(_div_background)
@@ -51,22 +57,27 @@ var stopEdit = function() {
                  $("#p-note-" + new_note_id).dblclick(function() {
                         jQuery.fn.stickyNotes.editNote(this);
                  });
+                 lock = false;
 }
 
 var droppedNote = function(e, ui){
-  var pos = ui.draggable.position();
+  if (ui.draggable.hasClass("tempnote"))   {
+    var pos = ui.draggable.position();
 
-  var pos_sticky = jQuery("#sticky-container").position();
-  var note = {
-      "id": new_note_id,
-      "text": jQuery("#p-note-" + new_note_id).html(),
-      "pos_x": pos.left - pos_sticky.left,
-      "pos_y": pos.top - pos_sticky.top,
-      "width": 80,
-      "height": 60
+    var pos_sticky = jQuery("#sticky-container").position();
+    var note = {
+        "id": new_note_id,
+        "text": jQuery("#p-note-" + new_note_id).html(),
+        "pos_x": parseInt(pos.left - pos_sticky.left),
+        "pos_y": parseInt(pos.top - pos_sticky.top),
+        "width": 80,
+        "height": 60
+    }
+    socket.emit("edited", {my: note});
+    ui.draggable.hide();
+    jQuery.fn.stickyNotes.renderNote(note);
+    jQuery.fn.stickyNotes.notes.push(note);
   }
-  socket.emit("edited", {my: note});
-  ui.draggable.appendTo(this);
 }
 
 var edited = function(note) {
@@ -88,8 +99,7 @@ var resized = function(note) {
   socket.emit('resized', {my: note});
 }
 
-
-showppt = function(){
+var showppt = function(){
   var c = jQuery(".current_note");
   var id = "-1";
   if ( c.size() != 0 ) {
@@ -99,6 +109,9 @@ showppt = function(){
   socket.emit('showme', {current: id});
 }
 
+/**
+ * 初期化
+ */
 jQuery(document).ready(function() {
   var notes_arr = new Array();
   jQuery(".comment").each(function(i, e){
@@ -115,7 +128,7 @@ jQuery(document).ready(function() {
   var options = {
      notes: notes_arr
     ,resizable: true
-    ,controls: true
+    ,controls: false
     ,editCallback: edited
     ,createCallback: created
     ,deleteCallback: deleted
@@ -132,6 +145,11 @@ jQuery(document).ready(function() {
          drop: droppedNote
   });
 });
+
+
+/**
+ * サーバーを監視して対応する
+ */
 
 socket.on('b_created', function(data){
   var mydata = data.my;

@@ -20,8 +20,9 @@ var commentschema = new Schema({
     height :String
 });
 
-
-// Configuration
+/**
+ * Configuration
+ */
 
 app.configure(function(){
   app.set('views', __dirname + '/views');
@@ -42,9 +43,11 @@ app.configure('production', function(){
   app.use(express.errorHandler()); 
 });
 
-// Routes
+/**
+ * Routes
+ */
 
-//app.get('/', routes.index);
+//  app.get('/', routes.index);
 app.get('/', function(req, res){
   Comment.find({}, function(err, comments){
     res.render('index', {title: 'quanBoard',comments: comments});
@@ -54,11 +57,14 @@ app.get('/', function(req, res){
 app.listen(3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 
-// process
+/**
+ * process
+ */
+
 io = io.listen(app)
 io.sockets.on('connection', function(socket){
 
-  // 新規
+  /* 新規 */
   socket.on('created', function(data){
     console.log(data);
     var mydata = data.my;
@@ -69,7 +75,7 @@ io.sockets.on('connection', function(socket){
     comment.pos_y  = mydata.pos_y;
     comment.width  = mydata.width;
     comment.height = mydata.height;
-    console.log(comment.pos_y);
+//console.log(comment.pos_y);
     comment.save(function(err){
       if (!err) console.log('Success!');
     });
@@ -77,7 +83,7 @@ io.sockets.on('connection', function(socket){
     socket.broadcast.emit('b_created', {my: mydata});
   });
 
-  // 移動
+  /* 移動 */
   socket.on('moved', function(data){
     var mydata = data.my;
     Comment.find({id : mydata.id}, function (err, comment) {
@@ -97,6 +103,7 @@ io.sockets.on('connection', function(socket){
     socket.broadcast.emit('b_moved', {my: mydata});   
   });
 
+  /* リサイズ */
   socket.on('resized', function(data){
     var mydata = data.my;
     Comment.find({id : mydata.id}, function (err, comment) {
@@ -116,10 +123,10 @@ io.sockets.on('connection', function(socket){
     socket.broadcast.emit('b_resized', {my: mydata});   
   });
 
-  // 編集
+  /* 編集 */
   socket.on('edited', function(data){
     var mydata = data.my;
-    console.log(data);
+//console.log(data);
     Comment.find({id : mydata.id}, function (err, comment) {
       if (!err && comment.length != 0) {
         Comment.update( { id: mydata.id }, 
@@ -129,14 +136,14 @@ io.sockets.on('connection', function(socket){
                         function(err) {if(err){console.log("errrrrrrrrrrrrr");}}
                       );
       } else {
-    var comment = new Comment();
+        var comment = new Comment();
         comment.id     = mydata.id;
         comment.text   = mydata.text;
         comment.pos_x  = mydata.pos_x;
         comment.pos_y  = mydata.pos_y;
         comment.width  = mydata.width;
         comment.height = mydata.height;
-        console.log(comment);
+//console.log(comment);
         comment.save(function(err){
           if (!err) console.log('Success!');
         });
@@ -146,7 +153,7 @@ io.sockets.on('connection', function(socket){
     socket.broadcast.emit('b_edited', {my: mydata});   
   });
 
-  // 削除
+  /* 削除 */
   socket.on('deleted', function(data){
     var mydata = data.my;
     Comment.find({id : mydata.id}, function (err, comment) {
@@ -162,7 +169,7 @@ io.sockets.on('connection', function(socket){
     socket.broadcast.emit('b_deleted', {my: mydata});  
   });
 
-  // ppt
+  /* ppt */
   socket.on('showme', function(c){
     var current = {};
     var cnote = null;
@@ -170,25 +177,24 @@ io.sockets.on('connection', function(socket){
     if ( c.current == '-1' ) {
       current.pos_x = -1;
       cnote = null;    
-    Comment.find({}, function (err, comments) {
-      if (!err && comments) {
-        comments.sort(function(a, b){
-          return parseInt(a.pos_x) - parseInt(b.pos_x)
-        });
-        for (i=0;i<comments.length;i++){
-          if ( comments[i].pos_x > current.pos_x ) {
-            note = comments[i];
+      Comment.find({}, function (err, comments) {
+        if (!err && comments) {
+          comments.sort(function(a, b){
+            return parseInt(a.pos_x) - parseInt(b.pos_x)
+          });
+          for (i=0;i<comments.length;i++){
+            if ( comments[i].pos_x > current.pos_x ) {
+              note = comments[i];
 //console.log(note);
-            break;   
+              break;   
+            }
           }
+        } else {
+          console.log(err);
         }
-      } else {
-        console.log(err);
-      }
-
-      socket.emit('next', {current: cnote, next: note});
-      socket.broadcast.emit('next', {current: cnote, next: note});
-    });
+        socket.emit('next', {current: cnote, next: note});
+        socket.broadcast.emit('next', {current: cnote, next: note});
+      });
     } else {
       Comment.find({id: c.current}, function(e, com){
         var cnote = com;
@@ -199,24 +205,24 @@ io.sockets.on('connection', function(socket){
               return parseInt(a.pos_x) - parseInt(b.pos_x)
             });
             for (i=0;i<comments.length;i++){
-console.log(i);
-console.log(parseInt(comments[i].pos_x));
-console.log(cnote);
+//console.log(i);
+//console.log(parseInt(comments[i].pos_x));
+//console.log(cnote);
               if ( parseInt(comments[i].pos_x) > parseInt(cnote[0].pos_x) ) {
                 note = comments[i];
-console.log("aaa.............");
+//console.log("aaa.............");
                 break;   
               }
             }
           } else {
             console.log(err);
           }
-
           socket.emit('next', {current: cnote, next: note});
           socket.broadcast.emit('next', {current: cnote, next: note});
         });
       });
     }
+
 /*
 check_send = function(cnote, note){
     Comment.find({}, function (err, comments) {
@@ -240,5 +246,6 @@ console.log(note);
     });
 }
 */
-  });
-});
+  }); //ppt end
+
+});//connection end
