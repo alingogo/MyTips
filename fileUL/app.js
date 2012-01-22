@@ -8,7 +8,9 @@ var express = require('express')
   , form = require('connect-form')
 
 var app = module.exports = express.createServer(
-  form({ keepExtensions: true })
+  form({   keepExtensions: true
+         , uploadDir: "/home/alin/temp"
+  })
 );
 
 // Configuration
@@ -61,6 +63,10 @@ app.post('/', function(req, res, next){
     var percent = (bytesReceived / bytesExpected * 100) | 0;
     process.stdout.write('Uploading: %' + percent + '\r');
   });
+
+  req.form.on('fileBegin', function(name, file){
+    file.path = req.form.uploadDir + "/" + file.name;
+  })
 });
 
 app.listen(3000);
