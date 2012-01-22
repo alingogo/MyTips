@@ -1,0 +1,13 @@
+h1 create board
+
+form(action='upload', method='post', enctype='multipart/form-data')
+  h2 name of board
+    br
+    input(type='text', name='title')
+    
+  h2 backgroud
+    br
+    input(type='file', name='upload', mutliple='multiple')
+    br
+    input(type='submit', name='Upload')
+

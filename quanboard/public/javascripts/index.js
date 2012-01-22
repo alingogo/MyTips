@@ -144,6 +144,7 @@ jQuery(document).ready(function() {
   jQuery("#sticky-container").droppable({
          drop: droppedNote
   });
+  jQuery("#sticky-container").css("background", "url(\"../images/"+jQuery("#bgname").text()+"\") no-repeat top left");
 });
 
 

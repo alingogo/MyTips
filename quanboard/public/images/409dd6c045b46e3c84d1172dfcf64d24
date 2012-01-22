@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta http-equiv="content-script-type" content="text/javascript" />
+<meta http-equiv="content-style-type" content="text/css" />
+<meta name="robots" content="noindex,nofollow" />
+<meta name="dc.title" content="quanPBI" />
+<meta name="description" content="uses for test of PBI" />
+<meta name="keyword" content="quanPBI, PBI" />
+<meta name="author" content="alin" />
+<meta name="copyright" content="by yan" />
+<link rel="shortcut icon" href="favicon.png" />
+
+<title>quanPBI</title>
+
+<link href="/stylesheets/scaffold.css?1314598624" media="screen" rel="stylesheet" type="text/css" />
+<script src="/javascripts/prototype.js?1310630879" type="text/javascript"></script>
+<script src="/javascripts/effects.js?1310630879" type="text/javascript"></script>
+<script src="/javascripts/dragdrop.js?1310630879" type="text/javascript"></script>
+<script src="/javascripts/controls.js?1310630879" type="text/javascript"></script>
+<script src="/javascripts/rails.js?1310630879" type="text/javascript"></script>
+<script src="/javascripts/application.js?1310630879" type="text/javascript"></script>
+<link href="/stylesheets/login.css?1314338187" media="screen" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine">
+</head>
+
+<body>
+<h1 id="welcome">quanPBI よこそう</h1>
+<div id="main" >
+  <div id="bigword">
+    <h1>人生をチェック</h1>
+  </div>
+  <div id="loginplace">
+<form accept-charset="UTF-8" action="/contents/simple_login?method=post" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="6fyCWlbXj3yq1+tXG9nSxfFMCNhJMZpMvaKdLbqBkHU=" /></div>      <dl class="dialog">
+        <dt>メールアドレス</dt>
+        <dd>
+          <input id="email" name="email" type="email" />
+        </dd>
+        <dt>パスワード</dt>
+        <dd>
+          <input id="password" name="password" type="password" />
+        </dd>
+      </dl>
+      <div class="dialogbutton">
+        <a href="/users/new">アカウントを作成</a>        <input name="commit" type="submit" value="ログイン" />
+      </div>
+</form>  </div>
+</div>
+
+
+</body>
+</html>
+
