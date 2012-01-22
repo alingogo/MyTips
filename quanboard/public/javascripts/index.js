@@ -73,7 +73,8 @@ var droppedNote = function(e, ui){
         "width": 80,
         "height": 60
     }
-    socket.emit("edited", {my: note});
+    var board_id = jQuery("#boardid").text();
+    socket.emit('edited', {boardid: board_id, my: note});
     ui.draggable.hide();
     jQuery.fn.stickyNotes.renderNote(note);
     jQuery.fn.stickyNotes.notes.push(note);
@@ -81,22 +82,26 @@ var droppedNote = function(e, ui){
 }
 
 var edited = function(note) {
-  socket.emit('edited', {my: note});
+  var board_id = jQuery("#boardid").text();
+  socket.emit('edited', {boardid: board_id, my: note});
 }
 var created = function(note) {
   //socket.emit('created', {my: note});
 }
 
 var deleted = function(note) {
-  socket.emit('deleted', {my: note});
+  var board_id = jQuery("#boardid").text();
+  socket.emit('deleted', {boardid: board_id, my: note});
 }
 
 var moved = function(note) {
-  socket.emit('moved', {my: note});
+  var board_id = jQuery("#boardid").text();
+  socket.emit('moved', {boardid: board_id, my: note});
 }
 
 var resized = function(note) {
-  socket.emit('resized', {my: note});
+  var board_id = jQuery("#boardid").text();
+  socket.emit('resized', {boardid: board_id, my: note});
 }
 
 var showppt = function(){

@@ -219,9 +219,9 @@
     jQuery.fn.stickyNotes.createNoteBackground = function() {
         var background = null;
         if (jQuery.browser.msie && jQuery.browser.version <= 6)  {
-            background = $(document.createElement('div')).addClass("background").html('<img src="images/spacer.gif" class="stretch" style="margin-top:5px;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'images/sticky-bg.png\',sizingMethod=\'scale\'");" alt="" />');
+            background = $(document.createElement('div')).addClass("background").html('<img src="images/spacer.gif" class="stretch" style="margin-top:5px;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'/images/sticky-bg.png\',sizingMethod=\'scale\'");" alt="" />');
         } else {
-            background = $(document.createElement('div')).addClass("background").html('<img src="images/sticky-bg.png" class="stretch" style="margin-top:5px;" alt="" />');
+            background = $(document.createElement('div')).addClass("background").html('<img src="/images/sticky-bg.png" class="stretch" style="margin-top:5px;" alt="" />');
         }
         return background;
 

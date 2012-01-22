@@ -23,6 +23,7 @@ var boardschema = new Schema({
 });
 var commentschema = new Schema({
     id     :Number,
+    board  :String,
     text   :String,
     pos_x  :String,
     pos_y  :String,
@@ -66,7 +67,7 @@ app.get('/index', function(req, res){
 
 app.get('/content/:id', function(req, res){
   Board.find({ _id: req.params.id }, function(err, board){
-    Comment.find({ _id: req.params.id}, function(err, comments){
+    Comment.find({ board: req.params.id}, function(err, comments){
       res.render('content', {title: 'quanBoard',comments: comments, board: board});
     });
   });
@@ -88,7 +89,6 @@ app.post('/upload', function(req, res, next){
       board.save(function(err){
         if (!err) console.log('Success!');
       });
-console.log(board._id);
       console.log('\nuploaded %s to %s'
         , files.upload.filename
         , files.upload.path);
@@ -191,6 +191,7 @@ io.sockets.on('connection', function(socket){
                       );
       } else {
         var comment = new Comment();
+        comment.board  = data.boardid;
         comment.id     = mydata.id;
         comment.text   = mydata.text;
         comment.pos_x  = mydata.pos_x;

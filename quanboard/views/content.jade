@@ -10,6 +10,7 @@ div(id="content")
     div(id="model")
 div(id="original_notes")
   p#bgname= board[0].filename
+  p#boardid= board[0]._id
   - each co in comments
     div.comment
       p #{co.id}
